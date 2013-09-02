@@ -10,4 +10,4 @@ To regularily check the branchname and log it into the file "gitwatch.log"
 
 To generate a report
 
-    python gitwarch.py gitwatch.log
+    python gitwatch.py gitwatch.log
