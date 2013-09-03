@@ -30,7 +30,12 @@ def report(filename, date = None):
 					print (dateTimeStr, lastBranch, timeSpan)
 				lastBranch = branch
 				startDate = endDate
-	
+
+def getLogLine(content):
+	now = datetime.datetime.now().strftime(datetimeFormat)
+	logLine = '%s\t%s' % (now, content)
+	return logLine
+				
 arglen = len(sys.argv)
 if arglen > 1:
 	filename = sys.argv[1]
@@ -42,15 +47,22 @@ if arglen > 1:
 	exit()
 	
 lastBranch = ''
-while True:
-	result = callProcess('git status -b --porcelain')
-	firstLine = result.split('\n')[0]
-	branch = firstLine.split(' ')[1]
-	now = datetime.datetime.now().strftime(datetimeFormat)
-	logLine = '%s\t%s' % (now, branch)
+try:
+	while True:
+		result = callProcess('git status -b --porcelain')
+		firstLine = result.split('\n')[0]
+		branch = firstLine.split(' ')[1]
+		logLine = getLogLine(branch)
+		print (logLine)
+		
+		log = open(logFileName, 'a')
+		print (logLine, file=log)
+		log.close()		
+		time.sleep(60)
+except (KeyboardInterrupt, SystemExit):
+	logLine = getLogLine('end')
 	print (logLine)
 	log = open(logFileName, 'a')
 	print (logLine, file=log)
 	log.close()
-	time.sleep(600)
-	
+
