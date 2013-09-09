@@ -30,6 +30,7 @@ def report(filename, date = None):
 					print (dateTimeStr, lastBranch, timeSpan)
 				lastBranch = branch
 				startDate = endDate
+	input("Press Enter to continue...")
 
 def getLogLine(content):
 	now = datetime.datetime.now().strftime(datetimeFormat)
