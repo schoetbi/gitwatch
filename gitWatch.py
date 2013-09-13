@@ -22,12 +22,12 @@ def report(filename, date = None):
 		for l in lines:
 			splitted = l.split('\t')
 			dateTimeStr =splitted[0]
-			branch = splitted[1]
+			branch = splitted[1][:-1]
 			if lastBranch != branch or l == lastLine:
 				endDate = datetime.datetime.strptime(dateTimeStr, datetimeFormat)
-				if startDate != None:
+				if startDate != None and lastBranch != 'end':
 					timeSpan = endDate - startDate
-					print (dateTimeStr, lastBranch, timeSpan)
+					print (str(endDate).ljust(22), str(timeSpan).ljust(10), lastBranch)
 				lastBranch = branch
 				startDate = endDate
 	input("Press Enter to continue...")
