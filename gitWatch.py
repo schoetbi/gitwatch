@@ -13,6 +13,7 @@ def callProcess(cmd):
 
 def report(filename, date = None):
 	print('report ' + filename)
+	branchmap = {}
 	with open(filename) as f:
 		lines = f.readlines()
 		lastBranch = ''
@@ -23,13 +24,27 @@ def report(filename, date = None):
 			splitted = l.split('\t')
 			dateTimeStr =splitted[0]
 			branch = splitted[1][:-1]
+			
+			if branch.find('...') != -1:
+				branch = branch.split('...')[0]
+			
 			if lastBranch != branch or l == lastLine:
 				endDate = datetime.datetime.strptime(dateTimeStr, datetimeFormat)
 				if startDate != None and lastBranch != 'end':
 					timeSpan = endDate - startDate
+					if lastBranch in branchmap:
+						branchmap[lastBranch] = branchmap[lastBranch] + timeSpan
+					else:
+						branchmap[lastBranch] = timeSpan
+			
 					print (str(endDate).ljust(22), str(timeSpan).ljust(10), lastBranch)
 				lastBranch = branch
 				startDate = endDate
+	
+	print(80*'-')
+	for k, v in branchmap.items():
+		print(k, v)
+	
 	input("Press Enter to continue...")
 
 def getLogLine(content):
